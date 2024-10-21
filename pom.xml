@@ -138,11 +138,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>${pmd.version}</version>
+                <version>3.16.0</version>
                 <configuration>
                     <targetJdk>17</targetJdk>
                     <rulesets>
-                        <ruleset>pmd-ruleset.xml</ruleset>
+                        <ruleset>${basedir}/pmd.xml</ruleset>
                     </rulesets>
                     <linkXRef>false</linkXRef>
                 </configuration>
@@ -201,14 +201,11 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
+                <version>4.7.3.0</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
-
 
 
             <!-- Modernizer Plugin -->
