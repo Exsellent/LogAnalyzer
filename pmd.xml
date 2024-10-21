@@ -6,7 +6,7 @@
 
     <description>Tweaked project rulesets</description>
 
-    <exclude-pattern>backend/academy/samples/.*</exclude-pattern>
+    <exclude-pattern>backend/academy/.*</exclude-pattern>
 
     <rule ref="category/java/codestyle.xml/TooManyStaticImports">
         <properties>

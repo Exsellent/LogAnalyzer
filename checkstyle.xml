@@ -183,6 +183,7 @@
         <module name="MethodParamPad"/>
         <module name="NoLineWrap"/>
         <module name="NoWhitespaceAfter"/>
+
         <module name="NoWhitespaceBefore"/>
         <module name="NoWhitespaceBeforeCaseDefaultColon"/>
         <module name="OperatorWrap"/>

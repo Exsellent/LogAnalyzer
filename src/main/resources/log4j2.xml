@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<Configuration
-    xmlns="http://logging.apache.org/log4j/2.0/config"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config
-    https://raw.githubusercontent.com/apache/logging-log4j2/master/log4j-core/src/main/resources/Log4j-config.xsd"
-    strict="true"
->
-    <Appenders>
-=======
 <Configuration status="WARN">
     <Appenders>
         <!-- Existing STDOUT_PLAIN Console appender -->
->>>>>>> 713f87a (Add .githooks folder with pre-commit hooks)
         <Console name="STDOUT_PLAIN" target="SYSTEM_OUT">
             <PatternLayout
                 disableAnsi="false"
                 pattern="%d{HH:mm:ss.SSS} %highlight{%-5p} [%-15.15thread] %-35.35logger{20} -- %highlight{%m}%n"
             />
         </Console>
-<<<<<<< HEAD
-=======
 
         <!-- Added Console appender with UTF-8 -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
         </Console>
->>>>>>> 713f87a (Add .githooks folder with pre-commit hooks)
     </Appenders>
 
     <Loggers>
@@ -40,11 +26,8 @@
 
         <Root level="TRACE">
             <AppenderRef ref="STDOUT_PLAIN"/>
-<<<<<<< HEAD
-=======
             <!-- Reference the new UTF-8 Console appender -->
             <AppenderRef ref="Console"/>
->>>>>>> 713f87a (Add .githooks folder with pre-commit hooks)
         </Root>
     </Loggers>
 </Configuration>
