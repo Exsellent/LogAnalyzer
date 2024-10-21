@@ -22,3 +22,11 @@ dependency-reduced-pom.xml
 ### log files ###
 *.log
 hs_err_pid*
+
+
+/src/main/java/backend/academy/Draft/
+
+# Example of .gitignore entries
+logs/
+libs/
+*.jar
