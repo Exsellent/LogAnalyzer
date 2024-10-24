@@ -1,22 +1,18 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.report;
 
-/**
- * Main class for generating reports in different formats.
- */
+import backend.academy.LogAnalyzer.core.LogStatistics;
+
 public final class ReportGenerator {
 
-    /**
-     * Private constructor to prevent instantiation of utility class.
-     */
     private ReportGenerator() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
     /**
-     * Generates a report in Markdown format.
+     * Генерирует отчет в формате Markdown.
      *
      * @param stats
-     *            Log statistics to be included in the report
+     *            Log statistics которая будет включена в отчет
      *
      * @return Formatted report as string
      */
@@ -25,10 +21,10 @@ public final class ReportGenerator {
     }
 
     /**
-     * Generates a report in AsciiDoc format.
+     * Генерирует отчет в формате AsciiDoc
      *
      * @param stats
-     *            Log statistics to be included in the report
+     *            Log statistics которая будет включена в отчет
      *
      * @return Formatted report as string
      */
@@ -37,12 +33,12 @@ public final class ReportGenerator {
     }
 
     /**
-     * Generic method to generate report using specified formatter.
+     * метод для создания отчета с использованием указанного форматирования.
      *
      * @param formatter
-     *            Report formatter to use
+     *            Report formatter который используется
      * @param stats
-     *            Log statistics to be included in the report
+     *            Log statistics которая будет включена в отчет
      *
      * @return Formatted report as string
      */

@@ -1,4 +1,4 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.core;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,10 +11,15 @@ import org.apache.logging.log4j.Logger;
 
 public final class LogParser {
     private static final Logger LOGGER = LogManager.getLogger(LogParser.class);
+
+    // поддержка двух форматов даты
+    private static final DateTimeFormatter OLD_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z",
+            Locale.ENGLISH);
+    private static final DateTimeFormatter ISO_DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
+
     private static final String LOG_PATTERN = "^(\\S+) - (\\S+) \\[(.+?)\\] \"(.+?)\""
             + " (\\d{3}) (\\d+) \"(.*?)\" \"(.*?)\"$";
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z",
-            Locale.ENGLISH);
+
     private static final int REMOTE_ADDR_GROUP = 1;
     private static final int REMOTE_USER_GROUP = 2;
     private static final int TIME_LOCAL_GROUP = 3;
@@ -25,7 +30,7 @@ public final class LogParser {
     private static final int HTTP_USER_AGENT_GROUP = 8;
 
     private LogParser() {
-        // Приватный конструктор для утилитарного класса
+
     }
 
     public static LogEntry parseLine(String line) throws IllegalArgumentException {
@@ -48,13 +53,20 @@ public final class LogParser {
 
         ZonedDateTime timeLocal;
         try {
-            timeLocal = ZonedDateTime.parse(timeLocalStr, DATE_TIME_FORMATTER);
+            // Попробуем сначала распарсить как ISO8601 дату
+
+            timeLocal = ZonedDateTime.parse(timeLocalStr, ISO_DATE_FORMATTER);
         } catch (DateTimeParseException e) {
-            LOGGER.debug("Failed to parse date: {}. Exception: {}", timeLocalStr, e.getMessage());
-            throw new IllegalArgumentException("Неверный формат даты: " + timeLocalStr, e);
+
+            // Если не удается, попробуем старый формат
+            try {
+                timeLocal = ZonedDateTime.parse(timeLocalStr, OLD_DATE_FORMATTER);
+            } catch (DateTimeParseException ex) {
+                LOGGER.debug("Failed to parse date: {}. Exception: {}", timeLocalStr, ex.getMessage());
+                throw new IllegalArgumentException("Неверный формат даты: " + timeLocalStr, ex);
+            }
         }
 
-        // Создаем объект LogEntryParams
         LogEntryParams params = new LogEntryParams();
         params.setRemoteAddr(remoteAddr);
         params.setRemoteUser(remoteUser);
@@ -65,7 +77,6 @@ public final class LogParser {
         params.setHttpReferer(httpReferer);
         params.setHttpUserAgent(httpUserAgent);
 
-        // Передаем LogEntryParams в конструктор LogEntry
         return new LogEntry(params);
     }
 }

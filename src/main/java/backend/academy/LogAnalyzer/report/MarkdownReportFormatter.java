@@ -1,12 +1,9 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.report;
 
-/**
- * Markdown implementation of report formatter.
- */
 public class MarkdownReportFormatter extends BaseReportFormatter {
 
     /**
-     * Creates markdown section header.
+     * Создаем markdown section header.
      *
      * @param title
      *            Section title
@@ -19,7 +16,7 @@ public class MarkdownReportFormatter extends BaseReportFormatter {
     }
 
     /**
-     * Creates markdown table header.
+     * Создаем markdown table header.
      *
      * @param columns
      *            Column names
@@ -41,7 +38,7 @@ public class MarkdownReportFormatter extends BaseReportFormatter {
     }
 
     /**
-     * Creates markdown table row.
+     * Создаем markdown table row.
      *
      * @param columns
      *            Row values
@@ -60,7 +57,7 @@ public class MarkdownReportFormatter extends BaseReportFormatter {
     }
 
     /**
-     * Generates status code row in markdown format.
+     * Генерируем строку кода состояния в формате markdown.
      *
      * @param statusCode
      *            HTTP status code

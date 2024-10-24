@@ -1,16 +1,13 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.report;
 
+import backend.academy.LogAnalyzer.core.LogStatistics;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import static backend.academy.LogAnalyzer.ReportConstants.BYTE_UNIT;
-import static backend.academy.LogAnalyzer.ReportConstants.DATE_FORMAT;
-import static backend.academy.LogAnalyzer.ReportConstants.FLOAT_FORMAT;
-import static backend.academy.LogAnalyzer.ReportConstants.Labels;
-import static backend.academy.LogAnalyzer.ReportConstants.StatusCodes;
+import static backend.academy.LogAnalyzer.report.ReportConstants.BYTE_UNIT;
+import static backend.academy.LogAnalyzer.report.ReportConstants.FLOAT_FORMAT;
+import static backend.academy.LogAnalyzer.report.ReportConstants.Labels;
+import static backend.academy.LogAnalyzer.report.ReportConstants.StatusCodes;
 
-/**
- * Base abstract class for report formatters.
- */
 public abstract class BaseReportFormatter implements ReportFormatter {
     protected StringBuilder report;
 
@@ -20,11 +17,13 @@ public abstract class BaseReportFormatter implements ReportFormatter {
 
     @Override
     public void appendGeneralInformation(LogStatistics stats) {
+        // Используем формат даты ISO8601 для всех дат
+        DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
         report.append(getSectionHeader("General Information")).append(getTableHeader("Metric", "Value"))
                 .append(getTableRow("File(s)", "`" + stats.getFileName() + "`"))
-                .append(getTableRow("Start Date",
-                        stats.getStartDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT))))
-                .append(getTableRow("End Date", stats.getEndDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT))))
+                .append(getTableRow("Start Date", stats.getStartDate().format(isoFormatter)))
+                .append(getTableRow("End Date", stats.getEndDate().format(isoFormatter)))
                 .append(getTableRow("Total Requests", String.valueOf(stats.getTotalRequests())))
                 .append(getTableRow("Average Response Size",
                         String.format(FLOAT_FORMAT, stats.getAverageResponseSize()) + BYTE_UNIT))

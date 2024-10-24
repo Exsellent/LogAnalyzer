@@ -1,20 +1,22 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.report;
 
-/**
- * Constants used in report formatting.
- */
 public final class ReportConstants {
+
     private ReportConstants() {
-        // Prevents instantiation
     }
 
-    public static final String DATE_FORMAT = "dd.MM.yyyy";
+    // Формат даты, по ISO8601 (год-месяц-день)
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    // Формат для отображения чисел с плавающей точкой
     public static final String FLOAT_FORMAT = "%.2f";
+
+    // Единица измерения для байтов
     public static final String BYTE_UNIT = " b|";
 
     public static final class StatusCodes {
         private StatusCodes() {
-            // Prevents instantiation
+
         }
 
         public static final int OK = 200;
@@ -26,9 +28,10 @@ public final class ReportConstants {
         public static final int RANGE_NOT_SATISFIABLE = 416;
     }
 
+    // Метки, используемые в отчетах.
     public static final class Labels {
         private Labels() {
-            // Prevents instantiation
+
         }
 
         public static final String REQUEST_COUNT = "Request Count";

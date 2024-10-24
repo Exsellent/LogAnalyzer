@@ -1,5 +1,6 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.core;
 
+import backend.academy.LogAnalyzer.io.LogReader;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,17 +28,17 @@ public final class LogAnalyzer {
     private static final String FORMAT_MARKDOWN = "markdown";
 
     private LogAnalyzer() {
-        // Приватный конструктор для предотвращения создания экземпляров
+
     }
 
     public static void analyze(String[] args) {
+
         Options options = new Options();
         options.addOption("f", OPTION_FILE, true, "Path to log file or URL");
         options.addOption(OPTION_FROM, true, "Start time in ISO8601 format");
         options.addOption(OPTION_TO, true, "End time in ISO8601 format");
         options.addOption("r", OPTION_OUTPUT, true, "Output report format (markdown or asciidoc)");
 
-        // Новые параметры фильтрации
         options.addOption(null, OPTION_FILTER_FIELD, true, "Field to filter (e.g., agent, method)");
         options.addOption(null, OPTION_FILTER_VALUE, true, "Value to filter by");
 
@@ -46,14 +47,12 @@ public final class LogAnalyzer {
         CommandLine cmd;
 
         try {
-            // Parsing command-line arguments
+
             cmd = parser.parse(options, args);
 
-            // Здесь проверяем, правильно ли считываются параметры фильтрации
             String filterField = cmd.getOptionValue(OPTION_FILTER_FIELD);
             String filterValue = cmd.getOptionValue(OPTION_FILTER_VALUE);
 
-            // Логирование значений для проверки
             LOGGER.info("Filter Field: {}", filterField);
             LOGGER.info("Filter Value: {}", filterValue);
 
@@ -62,12 +61,10 @@ public final class LogAnalyzer {
             String toTimeStr = cmd.getOptionValue(OPTION_TO);
             String outputFormat = cmd.getOptionValue(OPTION_OUTPUT, FORMAT_MARKDOWN);
 
-            // Date parsing
             DateTimeFormatter formatterDate = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
             ZonedDateTime fromTime = fromTimeStr != null ? ZonedDateTime.parse(fromTimeStr, formatterDate) : null;
             ZonedDateTime toTime = toTimeStr != null ? ZonedDateTime.parse(toTimeStr, formatterDate) : null;
 
-            // Log file reading, supporting both file path and URL
             List<LogEntry> entries = LogReader.readLogs(logFilePath).map(line -> {
                 try {
                     return LogParser.parseLine(line);
@@ -78,8 +75,6 @@ public final class LogAnalyzer {
             }).filter(Objects::nonNull).filter(entry -> LogFilter.filterByTime(entry, fromTime, toTime))
                     .filter(entry -> LogFilter.filterByField(entry, filterField, filterValue))
                     .collect(Collectors.toList());
-
-            // Generating and logging the report as usual
 
         } catch (ParseException e) {
             LOGGER.error("Error parsing arguments: {}", e.getMessage());

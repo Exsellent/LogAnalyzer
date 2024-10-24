@@ -1,4 +1,4 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,6 @@ public final class LogReader {
 
     private static final int MAX_RETRIES = 3;
 
-    // Приватный конструктор для предотвращения создания экземпляров класса
     private LogReader() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -25,7 +24,7 @@ public final class LogReader {
         if (isValidURL(path)) {
             return readFromUrlWithRetries(path, MAX_RETRIES).stream();
         } else {
-            // Проверка на существование файла
+
             Path filePath = getPath(path);
             if (!Files.exists(filePath)) {
                 throw new IOException("File does not exist: " + path);
@@ -40,7 +39,7 @@ public final class LogReader {
             return "http".equalsIgnoreCase(url.getProtocol()) || "https".equalsIgnoreCase(url.getProtocol())
                     || "file".equalsIgnoreCase(url.getProtocol());
         } catch (MalformedURLException e) {
-            return false; // Если не удаётся создать URL, значит это не корректный URL
+            return false;
         }
     }
 
@@ -50,7 +49,7 @@ public final class LogReader {
 
         while (attempt < maxRetries) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(path).openStream()))) {
-                // Прочитать все строки в список и вернуть его
+
                 return reader.lines().collect(Collectors.toList());
             } catch (IOException e) {
                 lastException = e;
@@ -67,11 +66,10 @@ public final class LogReader {
     // Метод для корректного получения пути, поддерживающий как URL, так и локальные файлы
     private static Path getPath(String path) throws IOException {
         try {
-            // Попытка преобразовать путь в URI, если это URL
             URL url = new URL(path);
             return Paths.get(url.toURI());
         } catch (MalformedURLException | IllegalArgumentException e) {
-            // Если это не URL, используем стандартный путь
+
             return Paths.get(path);
         } catch (Exception e) {
             throw new IOException("Unable to process path: " + path, e);

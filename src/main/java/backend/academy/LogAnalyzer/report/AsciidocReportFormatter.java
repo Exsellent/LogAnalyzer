@@ -1,15 +1,11 @@
-package backend.academy.LogAnalyzer;
+package backend.academy.LogAnalyzer.report;
 
-/**
- * AsciiDoc implementation of report formatter.
- */
 public class AsciidocReportFormatter extends BaseReportFormatter {
 
-    // Вынесение строки "|===" в константу для устранения ошибки Checkstyle
     private static final String ASCIIDOC_TABLE_SEPARATOR = "|===";
 
     /**
-     * Creates AsciiDoc section header.
+     * Создаем AsciiDoc section header.
      *
      * @param title
      *            Section title
@@ -22,7 +18,7 @@ public class AsciidocReportFormatter extends BaseReportFormatter {
     }
 
     /**
-     * Creates AsciiDoc table header.
+     * Создаем AsciiDoc table header.
      *
      * @param columns
      *            Column names
@@ -42,7 +38,7 @@ public class AsciidocReportFormatter extends BaseReportFormatter {
     }
 
     /**
-     * Creates AsciiDoc table row.
+     * Создаем AsciiDoc table row.
      *
      * @param columns
      *            Row values
@@ -61,7 +57,7 @@ public class AsciidocReportFormatter extends BaseReportFormatter {
     }
 
     /**
-     * Generates status code row in AsciiDoc format.
+     * Генерация status code row in AsciiDoc format.
      *
      * @param statusCode
      *            HTTP status code
@@ -79,7 +75,7 @@ public class AsciidocReportFormatter extends BaseReportFormatter {
 
     @Override
     public String getReport() {
-        // Используем константу вместо строки
+
         return super.getReport() + ASCIIDOC_TABLE_SEPARATOR + ReportConstants.Labels.NEW_LINE;
     }
 }
