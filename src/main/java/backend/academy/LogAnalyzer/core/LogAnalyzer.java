@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -19,6 +18,8 @@ import org.apache.logging.log4j.Logger;
 public final class LogAnalyzer {
 
     private static final Logger LOGGER = LogManager.getLogger(LogAnalyzer.class);
+
+    // Константы для строковых литералов
     private static final String OPTION_FILE = "file";
     private static final String OPTION_FROM = "from";
     private static final String OPTION_TO = "to";
@@ -28,27 +29,23 @@ public final class LogAnalyzer {
     private static final String FORMAT_MARKDOWN = "markdown";
 
     private LogAnalyzer() {
-
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static void analyze(String[] args) {
-
         Options options = new Options();
         options.addOption("f", OPTION_FILE, true, "Path to log file or URL");
         options.addOption(OPTION_FROM, true, "Start time in ISO8601 format");
         options.addOption(OPTION_TO, true, "End time in ISO8601 format");
         options.addOption("r", OPTION_OUTPUT, true, "Output report format (markdown or asciidoc)");
-
         options.addOption(null, OPTION_FILTER_FIELD, true, "Field to filter (e.g., agent, method)");
         options.addOption(null, OPTION_FILTER_VALUE, true, "Value to filter by");
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd;
 
         try {
-
-            cmd = parser.parse(options, args);
+            CommandLine cmd = parser.parse(options, args);
 
             String filterField = cmd.getOptionValue(OPTION_FILTER_FIELD);
             String filterValue = cmd.getOptionValue(OPTION_FILTER_VALUE);
@@ -65,16 +62,9 @@ public final class LogAnalyzer {
             ZonedDateTime fromTime = fromTimeStr != null ? ZonedDateTime.parse(fromTimeStr, formatterDate) : null;
             ZonedDateTime toTime = toTimeStr != null ? ZonedDateTime.parse(toTimeStr, formatterDate) : null;
 
-            List<LogEntry> entries = LogReader.readLogs(logFilePath).map(line -> {
-                try {
-                    return LogParser.parseLine(line);
-                } catch (IllegalArgumentException e) {
-                    LOGGER.warn("Invalid log entry: {}", line);
-                    return null;
-                }
-            }).filter(Objects::nonNull).filter(entry -> LogFilter.filterByTime(entry, fromTime, toTime))
-                    .filter(entry -> LogFilter.filterByField(entry, filterField, filterValue))
-                    .collect(Collectors.toList());
+            List<LogEntry> entries = LogReader.readLogs(logFilePath).map(LogParser::parseLine).flatMap(Optional::stream)
+                    .filter(entry -> LogFilter.filterByTime(entry, fromTime, toTime))
+                    .filter(entry -> LogFilter.filterByField(entry, filterField, filterValue)).toList();
 
         } catch (ParseException e) {
             LOGGER.error("Error parsing arguments: {}", e.getMessage());

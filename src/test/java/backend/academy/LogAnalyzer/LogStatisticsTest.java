@@ -39,10 +39,10 @@ class LogStatisticsTest {
         Map<String, Integer> resourceCounts = stats.getResourceCounts();
 
         // Then
-        assertNotNull(resourceCounts.get("/api/users")); // Убедитесь, что ресурс существует в мапе
-        assertEquals(2, resourceCounts.get("/api/users")); // Должно быть 2 запроса к /api/users
-        assertEquals(1, resourceCounts.get("/api/data")); // Должно быть 1 запрос к /api/data
-        assertEquals(1, resourceCounts.get("/api/admin")); // Должно быть 1 запрос к /api/admin
+        assertNotNull(resourceCounts.get("/api/users"));
+        assertEquals(2, resourceCounts.get("/api/users"));
+        assertEquals(1, resourceCounts.get("/api/data"));
+        assertEquals(1, resourceCounts.get("/api/admin"));
     }
 
     @Test
@@ -51,10 +51,10 @@ class LogStatisticsTest {
         Map<Integer, Integer> statusCounts = stats.getStatusCounts();
 
         // Then
-        assertNotNull(statusCounts.get(200)); // Убедитесь, что статус-код 200 существует в мапе
-        assertEquals(2, statusCounts.get(200)); // Должно быть 2 запроса с кодом 200
-        assertEquals(1, statusCounts.get(404)); // Должно быть 1 запрос с кодом 404
-        assertEquals(1, statusCounts.get(500)); // Должно быть 1 запрос с кодом 500
+        assertNotNull(statusCounts.get(200));
+        assertEquals(2, statusCounts.get(200));
+        assertEquals(1, statusCounts.get(404));
+        assertEquals(1, statusCounts.get(500));
     }
 
     @Test
@@ -63,16 +63,22 @@ class LogStatisticsTest {
         Map<String, Integer> ipCounts = stats.getTopIpAddresses();
 
         // Then
-        assertNotNull(ipCounts.get("127.0.0.1")); // Убедитесь, что IP-адрес существует в мапе
-        assertEquals(2, ipCounts.get("127.0.0.1")); // Должно быть 2 запроса с IP 127.0.0.1
-        assertEquals(1, ipCounts.get("127.0.0.2")); // Должно быть 1 запрос с IP 127.0.0.2
-        assertEquals(1, ipCounts.get("127.0.0.3")); // Должно быть 1 запрос с IP 127.0.0.3
+        assertNotNull(ipCounts.get("127.0.0.1"));
+        assertEquals(2, ipCounts.get("127.0.0.1"));
+        assertEquals(1, ipCounts.get("127.0.0.2"));
+        assertEquals(1, ipCounts.get("127.0.0.3"));
     }
 
     private LogEntry createLogEntry(String ip, String request, int status, int bytes) {
-        // Убедитесь, что строка запроса имеет правильный формат: метод, путь, версия HTTP
-        return new LogEntry.Builder().withRemoteAddr(ip).withTimeLocal(ZonedDateTime.now())
-                .withRequest("GET " + request + " HTTP/1.1") // добавлено "GET" и "HTTP/1.1"
-                .withStatus(status).withBodyBytesSent(bytes).build();
+        ZonedDateTime time = ZonedDateTime.now();
+        return new LogEntry(ip, // remoteAddr
+                "-", // remoteUser
+                time, // timeLocal
+                "GET " + request + " HTTP/1.1", // request
+                status, // status
+                bytes, // bodyBytesSent
+                "http://example.com", // httpReferer
+                "Mozilla/5.0" // httpUserAgent
+        );
     }
 }

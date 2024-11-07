@@ -20,7 +20,7 @@ public class LogStatistics {
     private ZonedDateTime endDate;
     private String fileName;
 
-    // Новые поля для дополнительной статистики
+    // Дополнительные статистические поля
     private Map<String, Integer> ipAddressCounts = new HashMap<>();
     private Map<Integer, Integer> hourlyDistribution = new HashMap<>();
 
@@ -56,16 +56,14 @@ public class LogStatistics {
         int status = entry.getStatus();
         statusCounts.put(status, statusCounts.getOrDefault(status, 0) + 1);
 
-        responseSizes.add((long) entry.getBodyBytesSent());
+        responseSizes.add(entry.getBodyBytesSent());
 
         String ipAddress = entry.getRemoteAddr();
         ipAddressCounts.put(ipAddress, ipAddressCounts.getOrDefault(ipAddress, 0) + 1);
 
-        // Обновление почасовой статистики
         int hour = entry.getTimeLocal().getHour();
         hourlyDistribution.put(hour, hourlyDistribution.getOrDefault(hour, 0) + 1);
 
-        // Обновление временных рамок
         if (startDate == null || entry.getTimeLocal().isBefore(startDate)) {
             startDate = entry.getTimeLocal();
         }
@@ -127,11 +125,10 @@ public class LogStatistics {
         this.fileName = fileName;
     }
 
-    // Новые геттеры для дополнительной статистики
     @SuppressWarnings("all")
     public Map<String, Integer> getTopIpAddresses() {
         return ipAddressCounts.entrySet().stream().sorted(Map.Entry.<String, Integer> comparingByValue().reversed())
-                .limit(10) // Получаем топ-10 IP-адресов
+                .limit(10)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 

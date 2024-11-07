@@ -24,7 +24,6 @@ public final class LogReader {
         if (isValidURL(path)) {
             return readFromUrlWithRetries(path, MAX_RETRIES).stream();
         } else {
-
             Path filePath = getPath(path);
             if (!Files.exists(filePath)) {
                 throw new IOException("File does not exist: " + path);
@@ -45,18 +44,15 @@ public final class LogReader {
 
     private static List<String> readFromUrlWithRetries(String path, int maxRetries) throws IOException {
         int attempt = 0;
-        IOException lastException = null;
 
         while (attempt < maxRetries) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(path).openStream()))) {
-
                 return reader.lines().collect(Collectors.toList());
             } catch (IOException e) {
-                lastException = e;
                 attempt++;
                 System.err.println("Failed to read from URL: " + path + ". Attempt " + attempt + " of " + maxRetries);
                 if (attempt >= maxRetries) {
-                    throw new IOException("Exceeded maximum retry attempts to read from URL: " + path, lastException);
+                    throw new IOException("Exceeded maximum retry attempts to read from URL: " + path, e);
                 }
             }
         }
@@ -69,7 +65,6 @@ public final class LogReader {
             URL url = new URL(path);
             return Paths.get(url.toURI());
         } catch (MalformedURLException | IllegalArgumentException e) {
-
             return Paths.get(path);
         } catch (Exception e) {
             throw new IOException("Unable to process path: " + path, e);

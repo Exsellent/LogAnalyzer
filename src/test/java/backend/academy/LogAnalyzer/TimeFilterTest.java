@@ -20,20 +20,25 @@ class LogFilterTest {
 
     @BeforeEach
     void setUp() {
-
         testEntry = createLogEntry("2015-05-21T10:00:00Z");
     }
 
     private LogEntry createLogEntry(String timeStr) {
         ZonedDateTime time = ZonedDateTime.parse(timeStr, FORMATTER);
-        return new LogEntry.Builder().withTimeLocal(time).withRemoteAddr("127.0.0.1")
-                .withRequest("GET /api/users HTTP/1.1").withStatus(200).withHttpUserAgent("Mozilla/5.0").build();
+        return new LogEntry("127.0.0.1", // remoteAddr
+                "-", // remoteUser
+                time, // timeLocal
+                "GET /api/users HTTP/1.1", // request
+                200, // status
+                1234L, // bodyBytesSent
+                "http://example.com", // httpReferer
+                "Mozilla/5.0" // httpUserAgent
+        );
     }
 
     @Test
     @DisplayName("Should filter by time range")
     void shouldFilterByTimeRange() {
-
         ZonedDateTime from = ZonedDateTime.parse("2015-05-21T09:00:00Z", FORMATTER);
         ZonedDateTime to = ZonedDateTime.parse("2015-05-21T11:00:00Z", FORMATTER);
 
@@ -43,7 +48,6 @@ class LogFilterTest {
     @Test
     @DisplayName("Should handle boundary values")
     void shouldIncludeBoundaryValues() {
-
         ZonedDateTime exactTime = ZonedDateTime.parse("2015-05-21T10:00:00Z", FORMATTER);
 
         assertTrue(LogFilter.filterByTime(testEntry, exactTime, exactTime));
@@ -52,7 +56,6 @@ class LogFilterTest {
     @Test
     @DisplayName("Should return false for non-overlapping range")
     void shouldReturnEmptyListForNonOverlappingRange() {
-
         ZonedDateTime from = ZonedDateTime.parse("2015-05-17T11:00:00Z", FORMATTER);
         ZonedDateTime to = ZonedDateTime.parse("2015-05-17T12:00:00Z", FORMATTER);
 
@@ -62,7 +65,6 @@ class LogFilterTest {
     @Test
     @DisplayName("Should filter by field")
     void shouldFilterByField() {
-
         assertTrue(LogFilter.filterByField(testEntry, "ip", "127.0.0.1"));
         assertTrue(LogFilter.filterByField(testEntry, "method", "GET"));
         assertTrue(LogFilter.filterByField(testEntry, "status", "200"));

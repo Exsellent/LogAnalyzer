@@ -1,32 +1,25 @@
 package backend.academy.LogAnalyzer.core;
 
 import java.time.ZonedDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class LogEntry {
-    private final String remoteAddr;
-    private final String remoteUser;
-    private final ZonedDateTime timeLocal;
-    private final String request;
-    private final int status;
-    private final int bodyBytesSent;
-    private final String httpReferer;
-    private final String httpUserAgent;
-
-    /**
-     * Object containing parameters for creating LogEntry
-     */
-    /* package */ LogEntry(LogEntryParams params) {
-        this.remoteAddr = params.getRemoteAddr();
-        this.remoteUser = params.getRemoteUser();
-        this.timeLocal = params.getTimeLocal();
-        this.request = params.getRequest();
-        this.status = params.getStatus();
-        this.bodyBytesSent = params.getBodyBytesSent();
-        this.httpReferer = params.getHttpReferer();
-        this.httpUserAgent = params.getHttpUserAgent();
-    }
-
-    // Gets the remote address.
+    private String remoteAddr;
+    private String remoteUser;
+    private ZonedDateTime timeLocal;
+    private String request;
+    private int status;
+    private long bodyBytesSent;
+    private String httpReferer;
+    private String httpUserAgent;
 
     public String getRemoteAddr() {
         return remoteAddr;
@@ -48,7 +41,7 @@ public class LogEntry {
         return status;
     }
 
-    public int getBodyBytesSent() {
+    public long getBodyBytesSent() {
         return bodyBytesSent;
     }
 
@@ -60,51 +53,36 @@ public class LogEntry {
         return httpUserAgent;
     }
 
-    public static class Builder {
-        private final LogEntryParams params = new LogEntryParams();
+    // Сеттеры
+    public void setRemoteAddr(String remoteAddr) {
+        this.remoteAddr = remoteAddr;
+    }
 
-        public Builder withRemoteAddr(String addr) {
-            params.setRemoteAddr(addr);
-            return this;
-        }
+    public void setRemoteUser(String remoteUser) {
+        this.remoteUser = remoteUser;
+    }
 
-        public Builder withRemoteUser(String user) {
-            params.setRemoteUser(user);
-            return this;
-        }
+    public void setTimeLocal(ZonedDateTime timeLocal) {
+        this.timeLocal = timeLocal;
+    }
 
-        public Builder withTimeLocal(ZonedDateTime timeLocal) {
-            params.setTimeLocal(timeLocal);
-            return this;
-        }
+    public void setRequest(String request) {
+        this.request = request;
+    }
 
-        public Builder withRequest(String request) {
-            params.setRequest(request);
-            return this;
-        }
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-        public Builder withStatus(int status) {
-            params.setStatus(status);
-            return this;
-        }
+    public void setBodyBytesSent(long bodyBytesSent) {
+        this.bodyBytesSent = bodyBytesSent;
+    }
 
-        public Builder withBodyBytesSent(int bodyBytesSent) {
-            params.setBodyBytesSent(bodyBytesSent);
-            return this;
-        }
+    public void setHttpReferer(String httpReferer) {
+        this.httpReferer = httpReferer;
+    }
 
-        public Builder withHttpReferer(String referer) {
-            params.setHttpReferer(referer);
-            return this;
-        }
-
-        public Builder withHttpUserAgent(String userAgent) {
-            params.setHttpUserAgent(userAgent);
-            return this;
-        }
-
-        public LogEntry build() {
-            return new LogEntry(params);
-        }
+    public void setHttpUserAgent(String httpUserAgent) {
+        this.httpUserAgent = httpUserAgent;
     }
 }

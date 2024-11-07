@@ -18,15 +18,7 @@ final class LogParser {
             Locale.ENGLISH);
     private static final DateTimeFormatter ISO_DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
-    // Регулярное выражение для разбора строки лога с комментариями для каждой части
-    private static final String LOG_PATTERN = "^(\\S+) " // IP-адрес клиента
-            + "- (\\S+) " // Имя пользователя (или "-")
-            + "\\[(.+?)\\] " // Временная метка в формате [dd/MMM/yyyy:HH:mm:ss Z]
-            + "\"(.+?)\" " // HTTP-запрос в кавычках (метод, ресурс и версия)
-            + "(\\d{3}) " // Статус-код HTTP-ответа (например, 200, 404)
-            + "(\\d+) " // Размер тела ответа в байтах
-            + "\"(.*?)\" " // Поле HTTP Referer в кавычках
-            + "\"(.*?)\"$"; // User-Agent клиента в кавычках
+    private static final String LOG_PATTERN = "^(\\S+) - (\\S+) \\[(.+?)\\] \"(.+?)\" (\\d{3}) (\\d+) \"(.*?)\" \"(.*?)\"$";
 
     private LogParser() {
         throw new UnsupportedOperationException("Utility class");

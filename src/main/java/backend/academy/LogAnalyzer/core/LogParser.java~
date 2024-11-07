@@ -14,18 +14,17 @@ public final class LogParser {
     private static final Logger LOGGER = LogManager.getLogger(LogParser.class);
 
     // Поддержка двух форматов даты: старого и ISO8601
-    private static final DateTimeFormatter OLD_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z",
-            Locale.ENGLISH);
+    private static final DateTimeFormatter OLD_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);
     private static final DateTimeFormatter ISO_DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
     private static final String LOG_PATTERN = "^(\\S+) " // IP-адрес клиента
-            + "- (\\S+) " // Имя пользователя (или "-")
-            + "\\[(.+?)\\] " // Временная метка в формате [dd/MMM/yyyy:HH:mm:ss Z]
-            + "\"(.+?)\" " // HTTP-запрос в кавычках (метод, ресурс и версия)
-            + "(\\d{3}) " // Статус-код HTTP-ответа (например, 200, 404)
-            + "(\\d+) " // Размер тела ответа в байтах
-            + "\"(.*?)\" " // Поле HTTP Referer в кавычках
-            + "\"(.*?)\"$"; // User-Agent клиента в кавычках
+        + "- (\\S+) " // Имя пользователя (или "-")
+        + "\\[(.+?)\\] " // Временная метка в формате [dd/MMM/yyyy:HH:mm:ss Z]
+        + "\"(.+?)\" " // HTTP-запрос в кавычках (метод, ресурс и версия)
+        + "(\\d{3}) " // Статус-код HTTP-ответа (например, 200, 404)
+        + "(\\d+) " // Размер тела ответа в байтах
+        + "\"(.*?)\" " // Поле HTTP Referer в кавычках
+        + "\"(.*?)\"$"; // User-Agent клиента в кавычках
 
     private static final int REMOTE_ADDR_GROUP = 1;
     private static final int REMOTE_USER_GROUP = 2;
@@ -43,9 +42,7 @@ public final class LogParser {
     /**
      * Парсит строку лога и возвращает Optional от LogEntry.
      *
-     * @param line
-     *            строка лога
-     *
+     * @param line строка лога
      * @return Optional от LogEntry, содержащий информацию о записи, или Optional.empty() при ошибке
      */
     public static Optional<LogEntry> parseLine(String line) {
@@ -69,8 +66,7 @@ public final class LogParser {
 
             ZonedDateTime timeLocal = parseDate(timeLocalStr);
 
-            return Optional.of(new LogEntry(remoteAddr, remoteUser, timeLocal, request, status, bodyBytesSent,
-                    httpReferer, httpUserAgent));
+            return Optional.of(new LogEntry(remoteAddr, remoteUser, timeLocal, request, status, bodyBytesSent, httpReferer, httpUserAgent));
         } catch (Exception e) {
             LOGGER.warn("Ошибка при парсинге строки лога: {}. Ошибка: {}", line, e.getMessage());
             return Optional.empty();
